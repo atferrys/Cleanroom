@@ -340,20 +340,24 @@ public class SplashProgress
                     }
 
                     // Get total loading progress and show it in the windows taskbar
-                    int firstSteps = (first != null ? first.getSteps() : 1),
-                        penultSteps = (penult != null ? penult.getSteps() : 1);
+                    if(first != null) {
 
-                    int firstStep = (first != null ? first.getStep() : 1),
-                        penultStep = (penult != null ? penult.getStep() : 1);
+                        int firstSteps = first.getSteps(),
+                            penultSteps = (penult != null ? penult.getSteps() : 1);
 
-                    int totalSteps = firstSteps * penultSteps;
-                    int completedSteps = (firstStep * penultSteps) + penultStep;
+                        int firstStep = first.getStep(),
+                            penultStep = (penult != null ? penult.getStep() : 1);
 
-                    int progress = Math.max(Math.min(completedSteps * 100 / totalSteps, 100), 0);
+                        int totalSteps = firstSteps * penultSteps;
+                        int completedSteps = (firstStep * penultSteps) + penultStep;
 
-                    if(progress > totalProgress) {
-                        totalProgress = progress;
-                        ForgeHooksClient.setTaskbarProgress(progress);
+                        int progress = Math.max(Math.min(completedSteps * 100 / totalSteps, 100), 0);
+
+                        if(progress > totalProgress) {
+                            totalProgress = progress;
+                            ForgeHooksClient.setTaskbarProgress(progress);
+                        }
+
                     }
 
                     angle += 1;
