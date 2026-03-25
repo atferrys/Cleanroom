@@ -85,6 +85,7 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraft.world.storage.SaveFormatOld;
 import net.minecraftforge.client.CloudRenderer;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.resource.IResourceType;
@@ -439,10 +440,12 @@ public class FMLClientHandler implements IFMLSidedHandler
         {
             GuiScreen errorScreen = errorToDisplay.createGui();
             showGuiScreen(errorScreen);
+            ForgeHooksClient.errorTaskbar();
         }
         else
         {
             logMissingTextureErrors();
+            ForgeHooksClient.clearTaskbarProgress();
         }
     }
     /**

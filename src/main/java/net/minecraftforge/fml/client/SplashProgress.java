@@ -60,6 +60,7 @@ import net.minecraft.client.resources.SimpleResource;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fml.common.EnhancedRuntimeException;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
@@ -262,6 +263,9 @@ public class SplashProgress
                 glEnable(GL_TEXTURE_2D);
                 fontRenderer = new SplashFontRenderer();
                 glDisable(GL_TEXTURE_2D);
+
+                int totalProgress = 0;
+
                 while(!done)
                 {
                     framecount++;
@@ -331,6 +335,23 @@ public class SplashProgress
                             drawBar(last);
                         }
                         glPopMatrix();
+                    }
+
+                    // Get total loading progress and show it in the windows taskbar
+                    int firstSteps = first.getSteps(),
+                        penultSteps = (penult != null ? penult.getSteps() : 1);
+
+                    int firstStep = first.getStep(),
+                        penultStep = (penult != null ? penult.getStep() : 1);
+
+                    int totalSteps = firstSteps * penultSteps;
+                    int completedSteps = (firstStep * penultSteps) + penultStep;
+
+                    int progress = Math.max(Math.min(completedSteps * 100 / totalSteps, 100), 0);
+
+                    if(progress > totalProgress) {
+                        totalProgress = progress;
+                        ForgeHooksClient.setTaskbarProgress(progress);
                     }
 
                     angle += 1;

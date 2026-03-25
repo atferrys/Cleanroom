@@ -41,6 +41,7 @@ import com.cleanroommc.client.windows.DwmApi;
 import com.cleanroommc.client.windows.NtDll;
 import com.cleanroommc.client.windows.TaskbarApi;
 import com.cleanroommc.client.windows.WindowsProperties;
+import com.sun.jna.platform.win32.WinDef;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -1010,6 +1011,32 @@ public class ForgeHooksClient
         }
     }
 
+    public static void errorTaskbar() {
+        if (SystemUtils.IS_OS_WINDOWS) {
+            TaskbarApi taskbarApi = TaskbarApi.getInstance();
+            if(taskbarApi != null) {
+                WinDef.HWND hwnd = TaskbarApi.hwndFromGlfw(WindowsProperties.handle);
+                taskbarApi.setProgressValue(hwnd, 1, 1);
+                taskbarApi.setProgressState(hwnd, TaskbarApi.TBPFLAG.TBPF_ERROR);
+            } else {
+                FMLLog.log.error("Unable to set taskbar error state, cannot invoke a null object.");
+            }
+        }
+    }
+
+    public static void setTaskbarProgress(int progress) {
+        if (SystemUtils.IS_OS_WINDOWS) {
+            TaskbarApi taskbarApi = TaskbarApi.getInstance();
+            if(taskbarApi != null) {
+                WinDef.HWND hwnd = TaskbarApi.hwndFromGlfw(WindowsProperties.handle);
+                taskbarApi.setProgressValue(hwnd, progress, 100);
+                taskbarApi.setProgressState(hwnd, TaskbarApi.TBPFLAG.TBPF_NORMAL);
+            } else {
+                FMLLog.log.error("Unable to set taskbar progress, cannot invoke a null object.");
+            }
+        }
+    }
+
     public static void shutdownTaskbarAPI() {
         TaskbarApi api = TaskbarApi.getInstance();
         if (api != null) {
@@ -1017,7 +1044,7 @@ public class ForgeHooksClient
             TaskbarApi.clearInstance();
         }
     }
-    
+
     public static void clearTaskbarProgress() {
         if (SystemUtils.IS_OS_WINDOWS) {
             var taskbar = TaskbarApi.getInstance();
