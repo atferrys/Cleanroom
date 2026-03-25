@@ -346,7 +346,7 @@ public class SplashProgress
                             penultSteps = (penult != null ? penult.getSteps() : 1);
 
                         int firstStep = first.getStep(),
-                            penultStep = (penult != null ? penult.getStep() : 1);
+                            penultStep = (penult != null ? penult.getStep() : 0);
 
                         int totalSteps = firstSteps * penultSteps;
                         int completedSteps = (firstStep * penultSteps) + penultStep;
