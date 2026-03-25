@@ -264,6 +264,8 @@ public class SplashProgress
                 fontRenderer = new SplashFontRenderer();
                 glDisable(GL_TEXTURE_2D);
 
+                // Total loading progress used to check if progress has
+                // grown and update the taskbar state
                 int totalProgress = 0;
 
                 while(!done)
@@ -338,10 +340,10 @@ public class SplashProgress
                     }
 
                     // Get total loading progress and show it in the windows taskbar
-                    int firstSteps = first.getSteps(),
+                    int firstSteps = (first != null ? first.getSteps() : 1),
                         penultSteps = (penult != null ? penult.getSteps() : 1);
 
-                    int firstStep = first.getStep(),
+                    int firstStep = (first != null ? first.getStep() : 1),
                         penultStep = (penult != null ? penult.getStep() : 1);
 
                     int totalSteps = firstSteps * penultSteps;
